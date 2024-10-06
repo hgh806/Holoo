@@ -1,16 +1,19 @@
 plugins {
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp.kotlin)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
     namespace = "com.holoo.map"
-    compileSdk = 34
+    compileSdk = ProjectConfig.compileSdk
 
     defaultConfig {
         applicationId = "com.holoo.map"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = ProjectConfig.minSdk
+        targetSdk = ProjectConfig.targetSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -30,17 +33,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = ProjectConfig.composeUiVersion
     }
     packaging {
         resources {
@@ -50,20 +53,41 @@ android {
 }
 
 dependencies {
+        //core
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.lifecycle.runtime.ktx)
+        implementation(libs.androidx.activity.compose)
+        implementation(platform(libs.androidx.compose.bom))
+        implementation(libs.androidx.ui)
+        implementation(libs.androidx.ui.graphics)
+        implementation(libs.androidx.ui.tooling.preview)
+        implementation(libs.androidx.material3)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+        //hilt
+        implementation(libs.hilt)
+        implementation(libs.hilt.navigation.fragment)
+        implementation(libs.hilt.navigation.compose)
+        ksp(libs.hilt.compiler)
+
+        //room
+        implementation(libs.room.ktx)
+        api(libs.room.runtime)
+        ksp(libs.room.compiler)
+
+        //network
+        implementation(libs.okhttp)
+        implementation(libs.retrofit)
+        implementation(libs.retrofit.kotlinx.serialization)
+        implementation(libs.kotlinx.serialization)
+        implementation(libs.okhttp)
+        implementation(libs.okhttp.logger)
+
+        //test
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
+        androidTestImplementation(platform(libs.androidx.compose.bom))
+        androidTestImplementation(libs.androidx.ui.test.junit4)
+        debugImplementation(libs.androidx.ui.tooling)
+        debugImplementation(libs.androidx.ui.test.manifest)
 }
