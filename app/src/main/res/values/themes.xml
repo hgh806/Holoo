@@ -2,4 +2,7 @@
 <resources>
 
     <style name="Theme.Holoo" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="AppTheme.FullScreen" parent="@style/Theme.AppCompat.NoActionBar">
+    </style>
 </resources>

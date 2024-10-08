@@ -1,5 +1,8 @@
 [versions]
 agp = "8.6.1"
+appcompat = "1.7.0"
+commonSdk = "0.0.3"
+constraintlayout = "2.1.4"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -11,14 +14,24 @@ composeBom = "2024.09.03"
 coil = "2.3.0"
 hilt-compose = "1.2.0"
 hilt = "2.51.1"
+mobileSdk = "1.0.3"
+playServicesGcm = "17.0.0"
+playServicesLocation = "21.3.0"
 room = "2.6.1"
 kotlinxSerialization = "1.6.3"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
-leanbackVersion = "1.2.0-alpha04"
+maps-compose = "2.11.0"
+play-services = "19.0.0"
+play-services-plugin = "4.4.2"
+firebase = "33.4.0"
+servicesSdk = "1.0.0"
 
 [libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+common-sdk = { module = "neshan-android-sdk:common-sdk", version.ref = "commonSdk" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -33,9 +46,13 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
-leanback = { group = "androidx.leanback", name = "leanback", version.ref = "leanbackVersion" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 
 # Retrofit
+mobile-sdk = { module = "neshan-android-sdk:mobile-sdk", version.ref = "mobileSdk" }
+play-services-gcm = { module = "com.google.android.gms:play-services-gcm", version.ref = "playServicesGcm" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
@@ -56,6 +73,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # Coil
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil"}
+services-sdk = { module = "neshan-android-sdk:services-sdk", version.ref = "servicesSdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -64,4 +82,5 @@ ksp-kotlin = { id = "com.google.devtools.ksp", version = "1.9.24-1.0.20" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "play-services-plugin" }
 

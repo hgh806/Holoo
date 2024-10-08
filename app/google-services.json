@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1050402209123",
+    "project_id": "holoo-3f36e",
+    "storage_bucket": "holoo-3f36e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050402209123:android:95eddadae571f09f39e756",
+        "android_client_info": {
+          "package_name": "com.holoo.map"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFgOTxi5-haSDaYNUPQwb66u4D3ljZor4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

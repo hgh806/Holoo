@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp.kotlin)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -53,41 +54,55 @@ android {
 }
 
 dependencies {
-        //core
-        implementation(libs.androidx.core.ktx)
-        implementation(libs.androidx.lifecycle.runtime.ktx)
-        implementation(libs.androidx.activity.compose)
-        implementation(platform(libs.androidx.compose.bom))
-        implementation(libs.androidx.ui)
-        implementation(libs.androidx.ui.graphics)
-        implementation(libs.androidx.ui.tooling.preview)
-        implementation(libs.androidx.material3)
+    //core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
 
-        //hilt
-        implementation(libs.hilt)
-        implementation(libs.hilt.navigation.fragment)
-        implementation(libs.hilt.navigation.compose)
-        ksp(libs.hilt.compiler)
+    //firebase
+    implementation(platform(libs.firebase.bom))
 
-        //room
-        implementation(libs.room.ktx)
-        api(libs.room.runtime)
-        ksp(libs.room.compiler)
+    //hilt
+    implementation(libs.hilt)
+    implementation(libs.hilt.navigation.fragment)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
-        //network
-        implementation(libs.okhttp)
-        implementation(libs.retrofit)
-        implementation(libs.retrofit.kotlinx.serialization)
-        implementation(libs.kotlinx.serialization)
-        implementation(libs.okhttp)
-        implementation(libs.okhttp.logger)
+    //room
+    implementation(libs.room.ktx)
+    api(libs.room.runtime)
+    ksp(libs.room.compiler)
 
-        //test
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.junit)
-        androidTestImplementation(libs.androidx.espresso.core)
-        androidTestImplementation(platform(libs.androidx.compose.bom))
-        androidTestImplementation(libs.androidx.ui.test.junit4)
-        debugImplementation(libs.androidx.ui.tooling)
-        debugImplementation(libs.androidx.ui.test.manifest)
+    //network
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logger)
+
+    //test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Neshan sdk library
+    implementation(libs.mobile.sdk)
+    implementation(libs.services.sdk)
+    implementation(libs.common.sdk)
+
+    //Play Services
+    implementation(libs.play.services.gcm)
+    implementation(libs.play.services.location)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
 }
