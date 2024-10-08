@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    //permission
+    implementation(libs.accompanist.permissions)
+
     //firebase
     implementation(platform(libs.firebase.bom))
 

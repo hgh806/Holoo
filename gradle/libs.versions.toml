@@ -22,10 +22,10 @@ kotlinxSerialization = "1.6.3"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
 maps-compose = "2.11.0"
-play-services = "19.0.0"
 play-services-plugin = "4.4.2"
 firebase = "33.4.0"
 servicesSdk = "1.0.0"
+accompanist = "0.35.0-alpha"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -74,6 +74,9 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 # Coil
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil"}
 services-sdk = { module = "neshan-android-sdk:services-sdk", version.ref = "servicesSdk" }
+
+# Permission
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
