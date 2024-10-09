@@ -1,12 +1,6 @@
 package com.holoo.map.ui
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,24 +43,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.res.ResourcesCompat
-import com.carto.styles.LineStyle
-import com.carto.styles.LineStyleBuilder
-import com.carto.styles.MarkerStyle
-import com.carto.styles.MarkerStyleBuilder
-import com.carto.styles.PolygonStyle
-import com.carto.styles.PolygonStyleBuilder
-import com.carto.utils.BitmapUtils
 import com.holoo.map.R
 import com.holoo.map.ui.dialog.BookmarkDialog
 import com.holoo.map.ui.dialog.BookmarkListDialog
 import com.holoo.map.ui.dialog.LocationInputDialog
 import com.holoo.map.ui.theme.HolooTheme
+import com.holoo.map.utils.MapUtils
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
 import org.neshan.mapsdk.model.Marker
 import org.neshan.mapsdk.model.Polyline
-import java.util.ArrayList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +112,7 @@ fun MainScreen(
                 mapView?.removeMarker(oldMarker)
             }
 
-            marker = createMarker(
+            marker = MapUtils.createMarker(
                 loc = it,
                 context = context,
             )
@@ -139,7 +125,7 @@ fun MainScreen(
             if (polyLine != null)
                 mapView?.removePolyline(polyLine)
 
-            polyLine = Polyline(ArrayList(uiState.routes), getLineStyle())
+            polyLine = Polyline(ArrayList(uiState.routes), MapUtils.getLineStyle())
             mapView?.addPolyline(polyLine)
             mapView?.moveCamera(uiState.routes.first(), .25f)
         }
@@ -150,7 +136,7 @@ fun MainScreen(
             mapView?.removeMarker(userMarker)
 
         uiState.currentLocation?.let { currentLocation ->
-            userMarker = createMarker(
+            userMarker = MapUtils.createMarker(
                 loc = currentLocation,
                 context = context,
                 icon = org.neshan.mapsdk.R.drawable.ic_marker,
@@ -373,53 +359,4 @@ private fun PreviewMainScreen() {
             onEvent = {}
         )
     }
-}
-
-// This method gets a LatLng as input and adds a marker on that position
-fun createMarker(
-    loc: LatLng,
-    context: Context,
-    @DrawableRes icon: Int = org.neshan.mapsdk.R.drawable.ic_cluster_marker_blue,
-    iconSize: Float = 30f,
-): Marker {
-    val markStCr = MarkerStyleBuilder()
-    markStCr.size = iconSize
-    val drawable = ResourcesCompat.getDrawable(
-        context.resources,
-        icon,
-        null
-    )
-    val bitmap = drawableToBitmap(drawable!!)
-    markStCr.bitmap = BitmapUtils.createBitmapFromAndroidBitmap(bitmap)
-    markStCr.setAnchorPoint(0f, 0f)
-    // AnimationStyle object - that was created before - is used here
-    val markSt: MarkerStyle = markStCr.buildStyle()
-
-    // Creating marker
-    return Marker(loc, markSt)
-}
-
-fun getLineStyle(): LineStyle? {
-    val lineStCr = LineStyleBuilder()
-    lineStCr.color =
-        com.carto.graphics.Color(2.toShort(), 119.toShort(), 189.toShort(), 190.toShort())
-    lineStCr.width = 4f
-    lineStCr.stretchFactor = 0f
-    return lineStCr.buildStyle()
-}
-
-fun drawableToBitmap(drawable: Drawable): Bitmap {
-    if (drawable is BitmapDrawable) {
-        return drawable.bitmap
-    }
-    val bitmap: Bitmap =
-        Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
 }
