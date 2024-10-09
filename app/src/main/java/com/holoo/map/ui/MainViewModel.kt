@@ -26,6 +26,15 @@ class MainViewModel @Inject constructor(
 
     init {
         locationProvider.setCallback(this)
+        getBookmarks()
+    }
+
+    private fun getBookmarks() = viewModelScope.launch {
+        mainRepository.getBookmarks().collect { bookmarks ->
+            _state.update {
+                it.copy(bookmarks = bookmarks)
+            }
+        }
     }
 
     fun onEvent(event: MainScreenUiEvent) = viewModelScope.launch {
