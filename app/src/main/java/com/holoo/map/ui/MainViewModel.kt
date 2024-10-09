@@ -11,6 +11,7 @@ import com.holoo.map.domain.use_cases.GetDirectionUseCase
 import com.holoo.map.utils.LocationProvider
 import com.holoo.map.utils.LocationProviderCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -29,7 +30,7 @@ class MainViewModel @Inject constructor(
 
     init {
         locationProvider.setCallback(this)
-//        getBookmarks()
+        getBookmarks()
     }
 
     private fun getBookmarks() = viewModelScope.launch {
@@ -49,13 +50,19 @@ class MainViewModel @Inject constructor(
                 event.description
             )
 
-            is MainScreenUiEvent.OnRemoveBookmark -> TODO()
+            is MainScreenUiEvent.OnRemoveBookmark -> removeBookmark(event.bookmark)
             is MainScreenUiEvent.GetDirection -> getDirection(event.origin, event.destination)
         }
     }
 
+    private fun removeBookmark(bookmark: LocationBookmarkEntity) {
+        viewModelScope.launch(IO) {
+            mainRepository.removeBookmark(bookmark)
+        }
+    }
+
     private fun bookMarkLocation(latLng: LatLng, title: String, description: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             val locationBookmarkEntity = LocationBookmarkEntity(
                 id = 0,
                 name = title,

@@ -9,4 +9,5 @@ interface MainRepository {
     suspend fun saveLocationBookmark(locationBookmarkEntity: LocationBookmarkEntity)
     suspend fun getBookmarks(): Flow<List<LocationBookmarkEntity>>
     suspend fun getDirection(origin: String, destination: String): Response<DirectionResponse>
+    suspend fun removeBookmark(bookmark: LocationBookmarkEntity)
 }

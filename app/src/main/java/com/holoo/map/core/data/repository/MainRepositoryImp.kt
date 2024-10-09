@@ -25,4 +25,8 @@ class MainRepositoryImp @Inject constructor(
     override suspend fun getDirection(origin: String, destination: String): Response<DirectionResponse> {
         return directionApiService.getDirection(origin, destination, BuildConfig.API_KEY)
     }
+
+    override suspend fun removeBookmark(bookmark: LocationBookmarkEntity) {
+        bookmarkDao.removeBookmark(bookmark)
+    }
 }
