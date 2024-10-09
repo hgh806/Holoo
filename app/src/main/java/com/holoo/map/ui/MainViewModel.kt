@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
         getBookmarks()
     }
 
-    private fun getBookmarks() = viewModelScope.launch {
+    private fun getBookmarks() = viewModelScope.launch(IO) {
         mainRepository.getBookmarks().collect { bookmarks ->
             _state.update {
                 it.copy(bookmarks = bookmarks)
