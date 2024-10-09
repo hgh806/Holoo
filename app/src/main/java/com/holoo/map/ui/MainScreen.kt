@@ -231,9 +231,9 @@ fun MainScreen(
 
         if (showBookmarkDialog) {
             BookmarkDialog(
-                confirm = { title ->
+                confirm = { title, description ->
                     showBookmarkDialog = false
-                    onEvent(MainScreenUiEvent.OnSaveMarker(marker?.latLng!!, title))
+                    onEvent(MainScreenUiEvent.OnSaveMarker(marker?.latLng!!, title, description))
                 },
                 dismiss = {
                     showBookmarkDialog = false

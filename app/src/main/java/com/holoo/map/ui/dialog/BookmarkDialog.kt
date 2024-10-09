@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -48,11 +49,15 @@ import com.holoo.map.ui.theme.HolooTheme
 @Composable
 fun BookmarkDialog(
     dismiss: () -> Unit,
-    confirm: (String) -> Unit,
+    confirm: (String, String) -> Unit,
 ) {
     val context = LocalContext.current
 
     var title by remember {
+        mutableStateOf("")
+    }
+
+    var description by remember {
         mutableStateOf("")
     }
 
@@ -117,6 +122,31 @@ fun BookmarkDialog(
                     }
                 )
 
+                Spacer8()
+
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .heightIn(min = 100.dp, max = 300.dp)
+                        .fillMaxWidth(),
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(text = stringResource(id = R.string.description)) },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    trailingIcon = {
+                        if (title.isNotBlank())
+                            IconButton(onClick = { title = "" }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = ""
+                                )
+                            }
+                    }
+                )
+
                 Spacer24()
 
                 Row(
@@ -141,7 +171,7 @@ fun BookmarkDialog(
                                 return@CustomButton
                             }
 
-                            confirm(title)
+                            confirm(title.trim(), description.trim())
                         }
                     )
 
@@ -169,10 +199,9 @@ fun BookmarkDialog(
 @Composable
 fun PreviewBookmarkDialog() {
     HolooTheme {
-        LocationInputDialog(
-            latLng = null,
+        BookmarkDialog (
             dismiss = {},
-            confirm = {},
+            confirm = {_, _ ->},
         )
     }
 }

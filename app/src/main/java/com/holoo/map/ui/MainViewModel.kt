@@ -31,18 +31,18 @@ class MainViewModel @Inject constructor(
     fun onEvent(event: MainScreenUiEvent) = viewModelScope.launch {
         when (event) {
             is MainScreenUiEvent.OnAddMarker -> updateMarker(event.latLng)
-            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(event.latLng, event.title)
+            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(event.latLng, event.title, event.description)
         }
     }
 
-    private fun bookMarkLocation(latLng: LatLng, title: String) {
+    private fun bookMarkLocation(latLng: LatLng, title: String, description: String) {
         viewModelScope.launch {
             val locationBookmarkEntity = LocationBookmarkEntity(
                 id = 0,
                 name = title,
                 latitude = latLng.latitude,
                 longitude = latLng.longitude,
-                description = "",
+                description = description,
             )
             mainRepository.saveLocationBookmark(locationBookmarkEntity)
         }
