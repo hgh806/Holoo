@@ -28,7 +28,7 @@ class LocationProvider @Inject constructor(
     }
 
     private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-    private val locationRequest: LocationRequest = LocationRequest.Builder(15*1000*10)
+    private val locationRequest: LocationRequest = LocationRequest.Builder(15*1000)
         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
         .build()
 
