@@ -31,7 +31,10 @@ class MainActivity : ComponentActivity() {
                     RequiredAppPermissions(permissionState = permissionState)
                 } else {
                     val uiState = viewModel.state.collectAsState()
-                    MainScreen(uiState = uiState.value)
+                    MainScreen(
+                        uiState = uiState.value,
+                        onEvent = viewModel::onEvent
+                    )
                 }
             }
         }

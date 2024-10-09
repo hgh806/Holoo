@@ -45,7 +45,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
@@ -63,7 +62,10 @@ import org.neshan.mapsdk.model.Marker
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(uiState: MainUiState) {
+fun MainScreen(
+    uiState: MainUiState,
+    onEvent: (event: MainScreenUiEvent) -> Unit,
+) {
     val context = LocalContext.current
 
     var mapView by remember {
@@ -95,6 +97,20 @@ fun MainScreen(uiState: MainUiState) {
         else {
             scaffoldState.bottomSheetState.show()
             scaffoldState.bottomSheetState.expand()
+        }
+    }
+
+    LaunchedEffect(uiState.marker) {
+        uiState.marker?.let {
+            marker?.let { oldMarker ->
+                mapView?.removeMarker(oldMarker)
+            }
+
+            marker = createMarker(
+                loc = it,
+                context = context,
+            )
+            mapView?.addMarker(marker)
         }
     }
 
@@ -152,9 +168,8 @@ fun MainScreen(uiState: MainUiState) {
                     modifier = Modifier,
                     onClick = {
                         mapView?.cameraTargetPosition?.let {
-                            marker?.let { mapView?.removeMarker(marker) }
                             val latLng = LatLng(it.latitude, it.longitude)
-                            marker = createMarker(latLng, context)
+                            onEvent(MainScreenUiEvent.OnAddMarker(latLng))
                         }
                     }
                 ) {
@@ -197,8 +212,7 @@ fun MainScreen(uiState: MainUiState) {
             LocationInputDialog(
                 latLng = marker?.latLng,
                 confirm = { latLng ->
-                    marker?.let { mapView?.removeMarker(marker) }
-                    marker = createMarker(latLng, context)
+                    onEvent(MainScreenUiEvent.OnAddMarker(latLng))
                     showInputDialog = false
                 },
                 dismiss = { showInputDialog = false }
@@ -269,7 +283,8 @@ fun SheetContent(
 private fun PreviewMainScreen() {
     HolooTheme {
         MainScreen(
-            uiState = MainUiState()
+            uiState = MainUiState(),
+            onEvent = {}
         )
     }
 }
@@ -279,7 +294,7 @@ fun createMarker(
     loc: LatLng,
     context: Context,
     @DrawableRes icon: Int = org.neshan.mapsdk.R.drawable.ic_cluster_marker_blue,
-    iconSize: Float = 30f
+    iconSize: Float = 30f,
 ): Marker {
     val markStCr = MarkerStyleBuilder()
     markStCr.size = iconSize
