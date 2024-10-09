@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
 import com.holoo.map.domain.repository.MainRepository
+import com.holoo.map.domain.use_cases.GetDirectionUseCase
 import com.holoo.map.utils.LocationProvider
 import com.holoo.map.utils.LocationProviderCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val locationProvider: LocationProvider,
     private val mainRepository: MainRepository,
+    private val getDirectionUseCase: GetDirectionUseCase
 ) :
     ViewModel(), LocationProviderCallback {
     private val _state = MutableStateFlow(MainUiState())

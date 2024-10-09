@@ -19,4 +19,6 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="no_bookmarks">There is not any bookmark</string>
     <string name="show_bookmarks">Show Bookmarks</string>
+    <string name="request_failed">Request Failed, Please Try Later</string>
+    <string name="network_failure">Please check your internet connection</string>
 </resources>
