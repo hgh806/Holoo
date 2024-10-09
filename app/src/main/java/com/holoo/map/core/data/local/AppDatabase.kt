@@ -12,6 +12,6 @@ import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
         LocationBookmarkEntity::class,
     ]
 )
-abstract class DotinDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
 }

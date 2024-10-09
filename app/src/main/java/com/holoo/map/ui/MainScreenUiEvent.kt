@@ -4,4 +4,5 @@ import org.neshan.common.model.LatLng
 
 sealed interface MainScreenUiEvent {
     data class OnAddMarker(val latLng: LatLng) : MainScreenUiEvent
+    data class OnSaveMarker(val latLng: LatLng) : MainScreenUiEvent
 }
