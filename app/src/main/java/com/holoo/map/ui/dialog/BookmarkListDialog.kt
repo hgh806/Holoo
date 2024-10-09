@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +38,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.holoo.map.R
 import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
-import com.holoo.map.ui.components.Spacer24
 import com.holoo.map.ui.components.Spacer8
 import com.holoo.map.ui.theme.HolooTheme
 
@@ -106,6 +106,9 @@ fun BookmarkListDialog(
                                 expandedItemIndex = if (expandedItemIndex == index) -1 else index
                             }
                         )
+
+                        Spacer8()
+                        HorizontalDivider()
                     }
                 }
 
@@ -134,15 +137,15 @@ fun BookMarkItem(
     toggleExpand: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.clickable {
-            onClick()
-        }
+        modifier = Modifier
+            .heightIn(min = 64.dp)
+            .clickable {
+                onClick()
+            }
     ) {
         Row(
             Modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-                .padding(16.dp),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = toggleExpand) {
@@ -158,7 +161,6 @@ fun BookMarkItem(
             Text(
                 text = bookmarkEntity.name,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleSmall
@@ -176,10 +178,10 @@ fun BookMarkItem(
         if (expanded) {
             Text(
                 text = bookmarkEntity.description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
             )
         }
     }
@@ -187,7 +189,27 @@ fun BookMarkItem(
 
 @Preview
 @Composable
-fun BookmarkListDialog() {
+private fun PreviewBookmarkItem() {
+    HolooTheme {
+        BookMarkItem(
+            bookmarkEntity = LocationBookmarkEntity(
+                id = 0,
+                name = "Bookmark",
+                description = "Description",
+                latitude = 0.0,
+                longitude = 0.0
+            ),
+            expanded = true,
+            remove = {},
+            onClick = {},
+            toggleExpand = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewBookmarkListDialog() {
     HolooTheme {
         BookmarkListDialog(
             bookmarks = emptyList(),
