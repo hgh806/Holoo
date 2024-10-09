@@ -3,7 +3,7 @@ package com.holoo.map.ui
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.holoo.map.core.data.repository.MainRepositoryImp
+import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
 import com.holoo.map.domain.repository.MainRepository
 import com.holoo.map.utils.LocationProvider
 import com.holoo.map.utils.LocationProviderCallback
@@ -31,12 +31,21 @@ class MainViewModel @Inject constructor(
     fun onEvent(event: MainScreenUiEvent) = viewModelScope.launch {
         when (event) {
             is MainScreenUiEvent.OnAddMarker -> updateMarker(event.latLng)
-            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation()
+            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(event.latLng, event.title)
         }
     }
 
-    private fun bookMarkLocation() {
-
+    private fun bookMarkLocation(latLng: LatLng, title: String) {
+        viewModelScope.launch {
+            val locationBookmarkEntity = LocationBookmarkEntity(
+                id = 0,
+                name = title,
+                latitude = latLng.latitude,
+                longitude = latLng.longitude,
+                description = "",
+            )
+            mainRepository.saveLocationBookmark(locationBookmarkEntity)
+        }
     }
 
     private fun updateMarker(latLng: LatLng) {

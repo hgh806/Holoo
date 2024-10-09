@@ -54,6 +54,7 @@ import com.carto.styles.PolygonStyle
 import com.carto.styles.PolygonStyleBuilder
 import com.carto.utils.BitmapUtils
 import com.holoo.map.R
+import com.holoo.map.ui.dialog.BookmarkDialog
 import com.holoo.map.ui.dialog.LocationInputDialog
 import com.holoo.map.ui.theme.HolooTheme
 import org.neshan.common.model.LatLng
@@ -81,6 +82,10 @@ fun MainScreen(
     }
 
     var showInputDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showBookmarkDialog by remember {
         mutableStateOf(false)
     }
 
@@ -139,7 +144,12 @@ fun MainScreen(
         sheetSwipeEnabled = false,
         sheetTonalElevation = 0.dp,
         sheetContent = {
-            SheetContent(direction = {}, saveLocation = {})
+            SheetContent(
+                direction = {},
+                saveLocation = {
+                    showBookmarkDialog = true
+                }
+            )
         }
     ) {
         Box(modifier = Modifier.padding()) {
@@ -216,6 +226,18 @@ fun MainScreen(
                     showInputDialog = false
                 },
                 dismiss = { showInputDialog = false }
+            )
+        }
+
+        if (showBookmarkDialog) {
+            BookmarkDialog(
+                confirm = { title ->
+                    showBookmarkDialog = false
+                    onEvent(MainScreenUiEvent.OnSaveMarker(marker?.latLng!!, title))
+                },
+                dismiss = {
+                    showBookmarkDialog = false
+                }
             )
         }
     }

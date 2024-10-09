@@ -12,4 +12,7 @@
     <string name="direction_button">Direction button</string>
     <string name="save">Save</string>
     <string name="save_button">Save button</string>
+    <string name="save_location">Save Location</string>
+    <string name="title">Title</string>
+    <string name="title_can_not_be_empty">Title can not be empty</string>
 </resources>

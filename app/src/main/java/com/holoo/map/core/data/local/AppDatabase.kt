@@ -6,7 +6,7 @@ import com.holoo.map.core.data.local.dao.BookmarkDao
 import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
 
 @Database(
-    version = 1,
+    version = 2,
     exportSchema = true,
     entities = [
         LocationBookmarkEntity::class,

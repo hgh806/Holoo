@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "location_bookmark")
 data class LocationBookmarkEntity(
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val name: String,
     val latitude: Double,
     val longitude: Double,
