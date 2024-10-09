@@ -16,4 +16,7 @@
     <string name="title">Title</string>
     <string name="title_can_not_be_empty">Title can not be empty</string>
     <string name="description">Description</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="no_bookmarks">There is not any bookmark</string>
+    <string name="show_bookmarks">Show Bookmarks</string>
 </resources>

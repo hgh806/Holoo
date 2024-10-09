@@ -32,6 +32,7 @@ class MainViewModel @Inject constructor(
         when (event) {
             is MainScreenUiEvent.OnAddMarker -> updateMarker(event.latLng)
             is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(event.latLng, event.title, event.description)
+            is MainScreenUiEvent.OnRemoveBookmark -> TODO()
         }
     }
 

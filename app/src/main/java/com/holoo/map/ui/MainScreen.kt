@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -55,6 +56,7 @@ import com.carto.styles.PolygonStyleBuilder
 import com.carto.utils.BitmapUtils
 import com.holoo.map.R
 import com.holoo.map.ui.dialog.BookmarkDialog
+import com.holoo.map.ui.dialog.BookmarkListDialog
 import com.holoo.map.ui.dialog.LocationInputDialog
 import com.holoo.map.ui.theme.HolooTheme
 import org.neshan.common.model.LatLng
@@ -86,6 +88,10 @@ fun MainScreen(
     }
 
     var showBookmarkDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showBookmarkList by remember {
         mutableStateOf(false)
     }
 
@@ -216,6 +222,20 @@ fun MainScreen(
                     )
                 }
             }
+
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .padding(top = 12.dp)
+                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape),
+                onClick = { showBookmarkList = true },
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_bookmark_border_24),
+                    contentDescription = stringResource(R.string.show_bookmarks)
+                )
+            }
         }
 
         if (showInputDialog) {
@@ -237,6 +257,22 @@ fun MainScreen(
                 },
                 dismiss = {
                     showBookmarkDialog = false
+                }
+            )
+        }
+
+        if (showBookmarkList) {
+            BookmarkListDialog(
+                bookmarks = uiState.bookmarks,
+                dismiss = {
+                    showBookmarkList = false
+                },
+                showOnMap = { bookmark ->
+                    val latLng = LatLng(bookmark.latitude, bookmark.longitude)
+                    onEvent(MainScreenUiEvent.OnAddMarker(latLng))
+                },
+                remove = { bookmark ->
+                    onEvent(MainScreenUiEvent.OnRemoveBookmark(bookmark))
                 }
             )
         }
