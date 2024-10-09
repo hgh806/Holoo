@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
+import com.carto.styles.LineStyle
+import com.carto.styles.LineStyleBuilder
 import com.carto.styles.MarkerStyle
 import com.carto.styles.MarkerStyleBuilder
 import com.carto.styles.PolygonStyle
@@ -62,6 +65,8 @@ import com.holoo.map.ui.theme.HolooTheme
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
 import org.neshan.mapsdk.model.Marker
+import org.neshan.mapsdk.model.Polyline
+import java.util.ArrayList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,6 +86,10 @@ fun MainScreen(
 
     var userMarker by remember {
         mutableStateOf<Marker?>(null)
+    }
+
+    var polyLine by remember {
+        mutableStateOf<Polyline?>(null)
     }
 
     var showInputDialog by remember {
@@ -125,6 +134,17 @@ fun MainScreen(
         }
     }
 
+    LaunchedEffect(uiState.routes) {
+        if (uiState.routes.isNotEmpty()) {
+            if (polyLine != null)
+                mapView?.removePolyline(polyLine)
+
+            polyLine = Polyline(ArrayList(uiState.routes), getLineStyle())
+            mapView?.addPolyline(polyLine)
+            mapView?.moveCamera(uiState.routes.first(), .25f)
+        }
+    }
+
     LaunchedEffect(key1 = uiState.currentLocation) {
         if (userMarker != null)
             mapView?.removeMarker(userMarker)
@@ -151,7 +171,15 @@ fun MainScreen(
         sheetTonalElevation = 0.dp,
         sheetContent = {
             SheetContent(
-                direction = {},
+                direction = {
+                    if (userMarker == null) {
+                        Toast.makeText(context, R.string.please_enable_gps, Toast.LENGTH_SHORT).show()
+                    } else if (marker == null) {
+                        Toast.makeText(context, R.string.please_select_destination, Toast.LENGTH_SHORT).show()
+                    } else {
+                        onEvent(MainScreenUiEvent.GetDirection(origin = userMarker!!.latLng, destination = marker!!.latLng))
+                    }
+                },
                 saveLocation = {
                     showBookmarkDialog = true
                 }
@@ -371,10 +399,13 @@ fun createMarker(
     return Marker(loc, markSt)
 }
 
-
-fun getPolygonStyle(): PolygonStyle? {
-    val polygonStCr = PolygonStyleBuilder()
-    return polygonStCr.buildStyle()
+fun getLineStyle(): LineStyle? {
+    val lineStCr = LineStyleBuilder()
+    lineStCr.color =
+        com.carto.graphics.Color(2.toShort(), 119.toShort(), 189.toShort(), 190.toShort())
+    lineStCr.width = 4f
+    lineStCr.stretchFactor = 0f
+    return lineStCr.buildStyle()
 }
 
 fun drawableToBitmap(drawable: Drawable): Bitmap {

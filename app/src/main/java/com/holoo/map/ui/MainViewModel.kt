@@ -3,6 +3,8 @@ package com.holoo.map.ui
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.borna.dotinfilm.core.data.remote.adapter.Failure
+import com.borna.dotinfilm.core.data.remote.adapter.Success
 import com.holoo.map.core.data.local.entity.LocationBookmarkEntity
 import com.holoo.map.domain.repository.MainRepository
 import com.holoo.map.domain.use_cases.GetDirectionUseCase
@@ -20,15 +22,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val locationProvider: LocationProvider,
     private val mainRepository: MainRepository,
-    private val getDirectionUseCase: GetDirectionUseCase
-) :
-    ViewModel(), LocationProviderCallback {
+    private val getDirectionUseCase: GetDirectionUseCase,
+) : ViewModel(), LocationProviderCallback {
     private val _state = MutableStateFlow(MainUiState())
     val state = _state.asStateFlow()
 
     init {
         locationProvider.setCallback(this)
-        getBookmarks()
+//        getBookmarks()
     }
 
     private fun getBookmarks() = viewModelScope.launch {
@@ -42,8 +43,14 @@ class MainViewModel @Inject constructor(
     fun onEvent(event: MainScreenUiEvent) = viewModelScope.launch {
         when (event) {
             is MainScreenUiEvent.OnAddMarker -> updateMarker(event.latLng)
-            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(event.latLng, event.title, event.description)
+            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation(
+                event.latLng,
+                event.title,
+                event.description
+            )
+
             is MainScreenUiEvent.OnRemoveBookmark -> TODO()
+            is MainScreenUiEvent.GetDirection -> getDirection(event.origin, event.destination)
         }
     }
 
@@ -66,14 +73,36 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun getDirection(origin: LatLng, destination: LatLng) {
+        viewModelScope.launch {
+            getDirectionUseCase(origin, destination).collect { result ->
+                when (result) {
+                    is Failure -> _state.update {
+                        it.copy(
+                            error = result.error,
+                            routes = emptyList()
+                        )
+                    }
+
+                    is Success -> _state.update {
+                        it.copy(
+                            routes = result.value
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         locationProvider.removeCallback()
     }
 
-    override fun onLocationChanged(location: Location) {
+    override fun onLocationChanged(location: Location?) {
         _state.update {
-            it.copy(currentLocation = LatLng(location.latitude, location.longitude))
+            val latLng = if (location != null) LatLng(location.latitude, location.longitude) else null
+            it.copy(currentLocation = latLng)
         }
     }
 }

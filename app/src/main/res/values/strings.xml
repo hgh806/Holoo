@@ -21,4 +21,6 @@
     <string name="show_bookmarks">Show Bookmarks</string>
     <string name="request_failed">Request Failed, Please Try Later</string>
     <string name="network_failure">Please check your internet connection</string>
+    <string name="please_enable_gps">Please Enable GPS</string>
+    <string name="please_select_destination">Please select destination</string>
 </resources>
