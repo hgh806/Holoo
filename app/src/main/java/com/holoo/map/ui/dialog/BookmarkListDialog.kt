@@ -161,7 +161,7 @@ fun BookMarkItem(
             Text(
                 text = bookmarkEntity.name,
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .weight(1f),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleSmall
             )
