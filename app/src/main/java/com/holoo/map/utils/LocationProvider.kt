@@ -13,6 +13,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import javax.inject.Inject
 
+interface LocationProviderCallback {
+    fun onLocationChanged(location: Location)
+}
+
 class LocationProvider @Inject constructor(
     context: Context
 ) {
@@ -41,10 +45,11 @@ class LocationProvider @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun setCallback() {
+    fun setCallback(locationProviderCallback: LocationProviderCallback) {
         fusedLocationClient.lastLocation.addOnCompleteListener {
             if (it.isSuccessful) {
                 lastLocation = it.result
+                locationProviderCallback.onLocationChanged(it.result)
                 log("Last registered location was: $lastLocation")
             }
         }

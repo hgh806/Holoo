@@ -1,18 +1,34 @@
 package com.holoo.map.ui
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.holoo.map.utils.LocationProvider
+import com.holoo.map.utils.LocationProviderCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.neshan.common.model.LatLng
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(val locationProvider: LocationProvider) : ViewModel() {
+class MainViewModel @Inject constructor(private val locationProvider: LocationProvider) :
+    ViewModel(), LocationProviderCallback {
+    private val _state = MutableStateFlow(MainUiState())
+    val state = _state.asStateFlow()
+
     init {
-        locationProvider.setCallback()
+        locationProvider.setCallback(this)
     }
 
     override fun onCleared() {
         super.onCleared()
         locationProvider.removeCallback()
+    }
+
+    override fun onLocationChanged(location: Location) {
+        _state.update {
+            it.copy(currentLocation = LatLng(location.latitude, location.longitude),)
+        }
     }
 }

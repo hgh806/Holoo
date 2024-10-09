@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
@@ -61,7 +63,7 @@ import org.neshan.mapsdk.model.Marker
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(uiState: MainUiState) {
     val context = LocalContext.current
 
     var mapView by remember {
@@ -69,6 +71,10 @@ fun MainScreen() {
     }
 
     var marker by remember {
+        mutableStateOf<Marker?>(null)
+    }
+
+    var userMarker by remember {
         mutableStateOf<Marker?>(null)
     }
 
@@ -89,6 +95,22 @@ fun MainScreen() {
         else {
             scaffoldState.bottomSheetState.show()
             scaffoldState.bottomSheetState.expand()
+        }
+    }
+
+    LaunchedEffect(key1 = uiState.currentLocation) {
+        if (userMarker != null)
+            mapView?.removeMarker(userMarker)
+
+        uiState.currentLocation?.let { currentLocation ->
+            userMarker = createMarker(
+                loc = currentLocation,
+                context = context,
+                icon = org.neshan.mapsdk.R.drawable.ic_marker,
+                iconSize = 20f
+            )
+
+            mapView?.addMarker(userMarker)
         }
     }
 
@@ -246,17 +268,24 @@ fun SheetContent(
 @Composable
 private fun PreviewMainScreen() {
     HolooTheme {
-        MainScreen()
+        MainScreen(
+            uiState = MainUiState()
+        )
     }
 }
 
 // This method gets a LatLng as input and adds a marker on that position
-fun createMarker(loc: LatLng, context: Context): Marker {
+fun createMarker(
+    loc: LatLng,
+    context: Context,
+    @DrawableRes icon: Int = org.neshan.mapsdk.R.drawable.ic_cluster_marker_blue,
+    iconSize: Float = 30f
+): Marker {
     val markStCr = MarkerStyleBuilder()
-    markStCr.size = 30f
+    markStCr.size = iconSize
     val drawable = ResourcesCompat.getDrawable(
         context.resources,
-        org.neshan.mapsdk.R.drawable.ic_cluster_marker_blue,
+        icon,
         null
     )
     val bitmap = drawableToBitmap(drawable!!)
