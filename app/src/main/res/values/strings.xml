@@ -3,4 +3,9 @@
     <string name="request_permissions">Request Permission</string>
     <string name="grant_permission_please">We need your permission to enable application options</string>
     <string name="grant_permission_from_mobile_settings">We need your permission to enable application options, \n Please enable theme from app setting</string>
+    <string name="input_destination">Input Destination</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

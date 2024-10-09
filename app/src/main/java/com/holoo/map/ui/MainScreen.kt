@@ -6,14 +6,18 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
@@ -30,6 +35,8 @@ import com.carto.styles.MarkerStyleBuilder
 import com.carto.styles.PolygonStyle
 import com.carto.styles.PolygonStyleBuilder
 import com.carto.utils.BitmapUtils
+import com.holoo.map.R
+import com.holoo.map.ui.dialog.LocationInputDialog
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
 import org.neshan.mapsdk.model.Marker
@@ -46,8 +53,33 @@ fun MainScreen() {
         mutableStateOf<Marker?>(null)
     }
 
+    var showInputDialog by remember {
+        mutableStateOf(false)
+    }
 
-    Scaffold { paddings ->
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                showInputDialog = true
+            }) {
+                Row(
+                    Modifier.padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(40.dp),
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = null
+                    )
+                    Text(
+                        stringResource(R.string.input_destination),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+        }
+    ) { paddings ->
         Box(modifier = Modifier.padding(paddings)) {
             Box(
                 Modifier
@@ -88,6 +120,18 @@ fun MainScreen() {
                     )
                 }
             }
+        }
+
+        if (showInputDialog) {
+            LocationInputDialog(
+                latLng = marker?.latLng,
+                confirm = { latLng ->
+                    marker?.let { mapView?.removeMarker(marker) }
+                    marker = createMarker(latLng, context)
+                    showInputDialog = false
+                },
+                dismiss = { showInputDialog = false }
+            )
         }
     }
 }
