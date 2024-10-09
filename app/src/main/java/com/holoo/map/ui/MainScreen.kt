@@ -284,6 +284,7 @@ fun MainScreen(
                 showOnMap = { bookmark ->
                     val latLng = LatLng(bookmark.latitude, bookmark.longitude)
                     onEvent(MainScreenUiEvent.OnAddMarker(latLng))
+                    showBookmarkList = false
                 },
                 remove = { bookmark ->
                     onEvent(MainScreenUiEvent.OnRemoveBookmark(bookmark))
