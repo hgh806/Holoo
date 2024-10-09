@@ -8,4 +8,8 @@
     <string name="longitude">Longitude</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="direction">Direction</string>
+    <string name="direction_button">Direction button</string>
+    <string name="save">Save</string>
+    <string name="save_button">Save button</string>
 </resources>
