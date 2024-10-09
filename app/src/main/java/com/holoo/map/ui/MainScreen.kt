@@ -97,6 +97,7 @@ fun MainScreen(
         )
     )
 
+    //show bottomSheet when a marker added
     LaunchedEffect(key1 = marker) {
         if (marker == null)
             scaffoldState.bottomSheetState.hide()
@@ -106,6 +107,7 @@ fun MainScreen(
         }
     }
 
+    //show marker when we have marker
     LaunchedEffect(uiState.marker) {
         uiState.marker?.let {
             marker?.let { oldMarker ->
@@ -121,6 +123,7 @@ fun MainScreen(
         }
     }
 
+    //show direction if we have routes
     LaunchedEffect(uiState.routes) {
         if (uiState.routes.isNotEmpty()) {
             if (polyLine != null)
@@ -132,6 +135,7 @@ fun MainScreen(
         }
     }
 
+    //update current location when it changes
     LaunchedEffect(key1 = uiState.currentLocation) {
         if (userMarker != null)
             mapView?.removeMarker(userMarker)
