@@ -3,6 +3,8 @@ package com.holoo.map.ui
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.holoo.map.core.data.repository.MainRepositoryImp
+import com.holoo.map.domain.repository.MainRepository
 import com.holoo.map.utils.LocationProvider
 import com.holoo.map.utils.LocationProviderCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +16,10 @@ import org.neshan.common.model.LatLng
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val locationProvider: LocationProvider) :
+class MainViewModel @Inject constructor(
+    private val locationProvider: LocationProvider,
+    private val mainRepository: MainRepository,
+) :
     ViewModel(), LocationProviderCallback {
     private val _state = MutableStateFlow(MainUiState())
     val state = _state.asStateFlow()
@@ -24,9 +29,14 @@ class MainViewModel @Inject constructor(private val locationProvider: LocationPr
     }
 
     fun onEvent(event: MainScreenUiEvent) = viewModelScope.launch {
-        when(event) {
+        when (event) {
             is MainScreenUiEvent.OnAddMarker -> updateMarker(event.latLng)
+            is MainScreenUiEvent.OnSaveMarker -> bookMarkLocation()
         }
+    }
+
+    private fun bookMarkLocation() {
+
     }
 
     private fun updateMarker(latLng: LatLng) {
@@ -42,7 +52,7 @@ class MainViewModel @Inject constructor(private val locationProvider: LocationPr
 
     override fun onLocationChanged(location: Location) {
         _state.update {
-            it.copy(currentLocation = LatLng(location.latitude, location.longitude),)
+            it.copy(currentLocation = LatLng(location.latitude, location.longitude))
         }
     }
 }
