@@ -117,6 +117,7 @@ fun MainScreen(
                 context = context,
             )
             mapView?.addMarker(marker)
+            mapView?.moveCamera(marker!!.latLng, .25f)
         }
     }
 
