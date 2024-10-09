@@ -14,7 +14,7 @@ import com.google.android.gms.location.Priority
 import javax.inject.Inject
 
 interface LocationProviderCallback {
-    fun onLocationChanged(location: Location)
+    fun onLocationChanged(location: Location?)
 }
 
 class LocationProvider @Inject constructor(
