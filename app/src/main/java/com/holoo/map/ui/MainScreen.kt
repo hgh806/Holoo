@@ -90,6 +90,10 @@ fun MainScreen(
         mutableStateOf(false)
     }
 
+    val bookMarkMarkers = remember {
+        mutableListOf<Marker>()
+    }
+
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue = SheetValue.Expanded,
@@ -104,6 +108,23 @@ fun MainScreen(
         else {
             scaffoldState.bottomSheetState.show()
             scaffoldState.bottomSheetState.expand()
+        }
+    }
+
+    LaunchedEffect(uiState.bookmarks) {
+        bookMarkMarkers.forEach {
+            mapView?.removeMarker(it)
+        }
+
+        if (uiState.bookmarks.isNotEmpty()) {
+            uiState.bookmarks.forEach {
+                val bookmarkMarker = MapUtils.createMarker(
+                    loc = LatLng(it.latitude, it.longitude),
+                    context = context,
+                    icon = R.drawable.baseline_bookmark_24
+                )
+                mapView?.addMarker(bookmarkMarker)
+            }
         }
     }
 
