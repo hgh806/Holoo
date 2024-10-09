@@ -27,6 +27,7 @@ class LocationProvider @Inject constructor(
         )
     }
 
+    private var locationProviderCallback: LocationProviderCallback? = null
     private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     private val locationRequest: LocationRequest = LocationRequest.Builder(15*1000)
         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
@@ -40,12 +41,16 @@ class LocationProvider @Inject constructor(
             super.onLocationResult(p0)
             p0.lastLocation?.let {
                 lastLocation = it
+                locationProviderCallback?.onLocationChanged(lastLocation)
+                log("Last Result location was: $lastLocation")
             }
         }
     }
 
     @SuppressLint("MissingPermission")
     fun setCallback(locationProviderCallback: LocationProviderCallback) {
+        this.locationProviderCallback = locationProviderCallback
+
         fusedLocationClient.lastLocation.addOnCompleteListener {
             if (it.isSuccessful) {
                 lastLocation = it.result
@@ -63,6 +68,7 @@ class LocationProvider @Inject constructor(
 
     fun removeCallback() {
         log("Removing location updates")
+        locationProviderCallback = null
         fusedLocationClient.removeLocationUpdates(locationUpdateListener)
     }
 
